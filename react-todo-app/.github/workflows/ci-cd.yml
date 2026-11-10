@@ -1,15 +1,17 @@
-name: React Todo CI/CD
+name: React Todo CI-CD Pipeline
 
 on:
   push:
+    branches: [docker]
   pull_request:
+    branches: [docker]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -17,9 +19,19 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: react-todo-app/package-lock.json
 
       - name: Install dependencies
+        working-directory: react-todo-app
         run: npm ci
 
+      - name: Run lint
+        working-directory: react-todo-app
+        run: npm run lint
+
       - name: Build React application
+        working-directory: react-todo-app
         run: npm run build
+
+      - name: Build Docker image
+        run: docker build -t react-todo-app:latest ./react-todo-app
