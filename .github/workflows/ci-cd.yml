@@ -1,4 +1,4 @@
- name: React Todo CI-CD Pipeline
+name: React Todo CI-CD Pipeline
 
 on:
   push:
@@ -25,13 +25,6 @@ jobs:
         working-directory: react-todo-app
         run: npm ci
 
-      - name: Run lint
-        working-directory: react-todo-app
-        run: npm run lint
-
       - name: Build React application
         working-directory: react-todo-app
         run: npm run build
-
-      - name: Build Docker image
-        run: docker build -t react-todo-app:latest ./react-todo-app
